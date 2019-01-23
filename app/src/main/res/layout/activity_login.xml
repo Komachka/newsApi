@@ -80,6 +80,25 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/password_confirm"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password_confirmation"
+                        android:imeActionId="6"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
 
 
                 <LinearLayout
@@ -102,15 +121,39 @@
                         android:text="@string/sing_in"
                         android:textColor="#fff"
                         android:textSize="16dp" />
+                    <Button
+                        android:id="@+id/email_sign_up_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/buttonstyle2"
+                        android:drawableStart="@drawable/icon_profile_empty"
+                        android:text="@string/sing_un"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:visibility="gone"/>
                     <TextView
+                        android:id="@+id/change_to_singup"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
                         android:drawablePadding="@dimen/cardview_default_elevation"
-                        android:text="@string/description"
+                        android:text="@string/have_no_account"
                         android:textColor="#fff"
                         android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/change_to_singin"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:drawablePadding="@dimen/cardview_default_elevation"
+                        android:text="@string/have_account"
+                        android:textColor="#fff"
+                        android:textSize="16sp"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

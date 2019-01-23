@@ -14,6 +14,8 @@
         completions."
     </string>
     <string name="wellcome">wellcome</string>
-    <string name="description">Still have not account? Sing Up</string>
+    <string name="have_no_account">Still have not account? Sing Up</string>
     <string name="sing_in">sing in</string>
+    <string name="sing_un">Sing Up</string>
+    <string name="have_account">Already have an account. Sing in</string>
 </resources>

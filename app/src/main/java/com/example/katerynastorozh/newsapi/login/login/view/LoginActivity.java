@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -15,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.katerynastorozh.newsapi.R;
@@ -44,12 +44,17 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     //private UserLoginTask mAuthTask = null;
 
     // UI references.
+    private Boolean singInMode;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mPasswordViewConfirm;
     private View mProgressView;
     private View mLoginFormView;
     private Button mEmailSignInButton;
+    private Button mEmailSignUpButton;
 
+    private TextView changeToSingUp;
+    private TextView changeToSingIn;
     private ILoginPresenter loginPresenter;
 
     @Override
@@ -61,9 +66,22 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         loginPresenter = new LoginPresenterCompl(this);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordViewConfirm = findViewById(R.id.password_confirm);
+
 
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignUpButton = findViewById(R.id.email_sign_up_button);
+
+
+        singInMode= true;
+
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -72,6 +90,32 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        changeToSingUp = findViewById(R.id.change_to_singup);
+        changeToSingIn = findViewById(R.id.change_to_singin);
+
+
+        changeToSingUp.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEmailSignUpButton.setVisibility(View.VISIBLE);
+                mEmailSignInButton.setVisibility(View.GONE);
+                changeToSingUp.setVisibility(View.GONE);
+                changeToSingIn.setVisibility(View.VISIBLE);
+                mPasswordViewConfirm.setVisibility(View.VISIBLE);
+                singInMode = false;
+            }
+        });
+
+        changeToSingIn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEmailSignInButton.setVisibility(View.VISIBLE);
+                mEmailSignUpButton.setVisibility(View.GONE);
+                changeToSingUp.setVisibility(View.VISIBLE);
+                changeToSingIn.setVisibility(View.GONE);
+                mPasswordViewConfirm.setVisibility(View.GONE);
+            }
+        });
     }
 
 
@@ -97,12 +141,20 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
+        boolean cancel = false;
+        View focusView = null;
+
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        if (!singInMode)
+        {
+            String confirm = mPasswordViewConfirm.getText().toString();
+            focusView = mPasswordViewConfirm;
+            cancel = true ? false : confirm.equals(password);
+        }
 
-        boolean cancel = false;
-        View focusView = null;
+
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
