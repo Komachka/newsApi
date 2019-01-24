@@ -1,16 +1,19 @@
-package com.example.katerynastorozh.newsapi.login.login.view;
+package com.example.katerynastorozh.newsapi.login.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,30 +21,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.katerynastorozh.newsapi.R;
-import com.example.katerynastorozh.newsapi.login.login.presenter.ILoginPresenter;
-import com.example.katerynastorozh.newsapi.login.login.presenter.LoginPresenterCompl;
+import com.example.katerynastorozh.newsapi.login.model.IUser;
+import com.example.katerynastorozh.newsapi.login.presenter.LoginPresenterCompl;
+import com.example.katerynastorozh.newsapi.main.view.MainActivity;
+import com.example.katerynastorozh.newsapi.profile.ProfileActivity;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements ILoginView {
+public class LoginActivity extends AppCompatActivity implements ILoginView, View.OnClickListener {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    //private UserLoginTask mAuthTask = null;
 
     // UI references.
     private Boolean singInMode;
@@ -55,88 +45,60 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     private TextView changeToSingUp;
     private TextView changeToSingIn;
-    private ILoginPresenter loginPresenter;
+    private LoginPresenterCompl loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-
         loginPresenter = new LoginPresenterCompl(this);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordViewConfirm = findViewById(R.id.password_confirm);
-
-
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignUpButton = findViewById(R.id.email_sign_up_button);
-
-
         singInMode= true;
-
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         changeToSingUp = findViewById(R.id.change_to_singup);
         changeToSingIn = findViewById(R.id.change_to_singin);
-
-
-        changeToSingUp.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mEmailSignUpButton.setVisibility(View.VISIBLE);
-                mEmailSignInButton.setVisibility(View.GONE);
-                changeToSingUp.setVisibility(View.GONE);
-                changeToSingIn.setVisibility(View.VISIBLE);
-                mPasswordViewConfirm.setVisibility(View.VISIBLE);
-                singInMode = false;
-            }
-        });
-
-        changeToSingIn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mEmailSignInButton.setVisibility(View.VISIBLE);
-                mEmailSignUpButton.setVisibility(View.GONE);
-                changeToSingUp.setVisibility(View.VISIBLE);
-                changeToSingIn.setVisibility(View.GONE);
-                mPasswordViewConfirm.setVisibility(View.GONE);
-            }
-        });
+        mEmailSignInButton.setOnClickListener(this);
+        mEmailSignUpButton.setOnClickListener(this);
+        changeToSingUp.setOnClickListener(this);
+        changeToSingIn.setOnClickListener(this);
     }
 
 
+    private void setSingInMode()
+    {
+        mEmailSignInButton.setVisibility(View.VISIBLE);
+        changeToSingUp.setVisibility(View.VISIBLE);
+
+        mEmailSignUpButton.setVisibility(View.GONE);
+        changeToSingIn.setVisibility(View.GONE);
+        mPasswordViewConfirm.setVisibility(View.GONE);
+        singInMode = true;
+    }
 
 
+    private void setSingUpMode()
+    {
+        mEmailSignUpButton.setVisibility(View.VISIBLE);
+        changeToSingIn.setVisibility(View.VISIBLE);
+        mPasswordViewConfirm.setVisibility(View.VISIBLE);
+
+        mEmailSignInButton.setVisibility(View.GONE);
+        changeToSingUp.setVisibility(View.GONE);
+        singInMode = false;
+    }
 
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
 
-
-
-        /*if (mAuthTask != null) {
-            return;
+        if (loginPresenter.isLoginIn())
+        {
+            Toast.makeText(this, "Is login in", Toast.LENGTH_LONG).show();
         }
-*/
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -149,9 +111,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         String password = mPasswordView.getText().toString();
         if (!singInMode)
         {
+
             String confirm = mPasswordViewConfirm.getText().toString();
             focusView = mPasswordViewConfirm;
-            cancel = true ? false : confirm.equals(password);
+            cancel = !confirm.equals(password);
+            mPasswordViewConfirm.setError(getString(R.string.error_diff_pass));
+            Toast.makeText(this, "cancel = " + cancel, Toast.LENGTH_LONG).show();
         }
 
 
@@ -181,33 +146,64 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-
-            loginPresenter.singIN(email, password);
-
-            //mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
+            onSetProgressBarVisibility(true);
+            if (singInMode)
+                loginPresenter.singIN(email, password);
+            else
+                loginPresenter.singUP(email, password);
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+    public boolean isEmailValid(String email) {
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+    @Override
+    public void updateUi(FirebaseUser user) {
+        if (user != null)
+        {
+            Toast.makeText(this, "You are login in as " + user.getDisplayName(), Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    @Override
+    public void startProfileActivity() {
+
+        startActivity(new Intent(this, ProfileActivity.class));
+    }
+
+
+
+    public boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
+
+    @Override
+    public void onClearText() {
+        mEmailView.setText("");
+        mPasswordView.setText("");
+    }
+
+    @Override
+    public void onLoginResult(Boolean result, int code) {
+        //if result ok - go to main activity
+        //if no make a toast with message
+
+
+        loginPresenter.setProgressBarVisiblity(false);
+        mEmailSignInButton.setEnabled(true);
+        if (result){
+            Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(this,"Login Fail, code = " + code,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSetProgressBarVisibility(final Boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -234,40 +230,54 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
 
-
-
-
-    @Override
-    public void onClearText() {
-        mEmailView.setText("");
-        mPasswordView.setText("");
     }
 
     @Override
-    public void onLoginResult(Boolean result, int code) {
-        loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
-        mEmailSignInButton.setEnabled(true);
-        if (result){
-            Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
-        }
-        else
-            Toast.makeText(this,"Login Fail, code = " + code,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSetProgressBarVisibility(int visibility) {
-        //showProgress();
-        mProgressView.setVisibility(visibility);
-        //progressBar.setVisibility(visibility);
-    }
-
-    @Override
-    public Activity getContext() {
+    public Activity getActivity() {
         return this;
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.change_to_singup:
+            {
+                setSingUpMode();
+                break;
+            }
+            case R.id.change_to_singin:
+            {
+                setSingInMode();
+                break;
+            }
+            case R.id.email_sign_in_button:
+            {
+                attemptLogin();
+                break;
+            }
+            case R.id.email_sign_up_button:
+            {
+                attemptLogin();
+                break;
+            }
+        }
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        loginPresenter.removeAuthListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loginPresenter.addAuthListener();
+    }
 }
 
