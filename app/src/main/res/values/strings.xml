@@ -27,25 +27,24 @@
 
 
         <string-array name="city_array">
-            <item>Mercury</item>
-            <item>Venus</item>
-            <item>Earth</item>
-            <item>Mars</item>
-            <item>Jupiter</item>
-            <item>Saturn</item>
-            <item>Uranus</item>
-            <item>Neptune</item>
+            <item>Kyiv</item>
+            <item>Kharkiv</item>
+            <item>Dnipro</item>
+            <item>Lviv</item>
+            <item>Varshava</item>
+            <item>Kraków</item>
+            <item>Łódź</item>
+            <item>Poznan</item>
+            <item>Berlin</item>
+            <item>Munchen</item>
+            <item>Cologne</item>
+            <item>Hamburg</item>
         </string-array>
 
 
     <string-array name="country_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+        <item>Ukraine</item>
+        <item>Poland</item>
+        <item>Germany</item>
     </string-array>
 </resources>

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.katerynastorozh.newsapi.login.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +24,22 @@ public class ProfilePresenter {
     FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference userIdRefer;
+
+    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser firebaseUser = auth.getCurrentUser();
+            if (firebaseUser != null)
+            {
+                Log.d(LOG_TAG, "onAuthStateChanged, user != null");
+                profileView.toLoginpage();
+            }
+            else
+            {
+                Log.d(LOG_TAG, "onAuthStateChanged, user == null");
+            }
+        }
+    };
 
 
 
@@ -49,7 +66,7 @@ public class ProfilePresenter {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.e(LOG_TAG, databaseError.getMessage());
             }
         });
 

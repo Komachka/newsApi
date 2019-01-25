@@ -6,29 +6,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".profile.ProfileActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First name"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#b1d2c6"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last name"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#b1d2c6"/>
+
+    </android.support.design.widget.TextInputLayout>
 
 
     <EditText
-        android:id="@+id/firstName"
+        android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="First Name"
-        android:inputType="textPersonName"
-         />
-
-    <EditText
-        android:id="@+id/lastName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Last Name" />
+        android:inputType="phone"
+        android:hint="Phone number"
+        android:textColorHint="#b1d2c6"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose the Country"/>
+        android:text="Choose the Country"
+        android:textSize="18sp"/>
     <Spinner
         android:id="@+id/country_spinner"
         android:layout_width="fill_parent"
@@ -36,28 +62,34 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose the City"/>
+        android:text="Choose the City"
+        android:textSize="18sp"/>
     <Spinner
         android:id="@+id/city_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Last Name" />
 
-    <DatePicker
+
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></DatePicker>
+        android:layout_height="wrap_content"
+        android:text="Click to set data of birth"
+        android:id="@+id/dateTextField"
+        android:textSize="18sp"/>
+
+
 
 
     <Button
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="saveData"/>
+        android:onClick="saveData"
+        android:text="Save Data"
+        android:background="#b1d2c6"/>
+
+
 
 </LinearLayout>

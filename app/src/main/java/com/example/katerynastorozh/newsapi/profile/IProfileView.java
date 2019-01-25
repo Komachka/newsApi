@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public interface IProfileView {
 
-    void updateProfile(UserModel curUser);
     void goToMainActivity();
 
+    void toLoginpage();
 }
