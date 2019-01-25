@@ -3,16 +3,12 @@ package com.example.katerynastorozh.newsapi.login.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.katerynastorozh.newsapi.R;
-import com.example.katerynastorozh.newsapi.login.model.IUser;
 import com.example.katerynastorozh.newsapi.login.presenter.LoginPresenterCompl;
-import com.example.katerynastorozh.newsapi.main.view.MainActivity;
 import com.example.katerynastorozh.newsapi.profile.ProfileActivity;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -170,7 +164,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     @Override
     public void startProfileActivity() {
 
-        startActivity(new Intent(this, ProfileActivity.class));
+        startActivity(new Intent(this, ProfileActivity.class).putExtra("singInMode", singInMode));
+        finish();
+
     }
 
 

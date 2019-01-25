@@ -9,5 +9,5 @@ public interface IProfileView {
 
     void goToMainActivity();
 
-    void toLoginpage();
+    void updateUI(UserModel user);
 }

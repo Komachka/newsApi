@@ -2,14 +2,9 @@ package com.example.katerynastorozh.newsapi.profile;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,13 +12,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.katerynastorozh.newsapi.R;
 import com.example.katerynastorozh.newsapi.login.model.UserModel;
 import com.example.katerynastorozh.newsapi.main.view.MainActivity;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -55,6 +51,11 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra(("singInMode"), false))
+        {
+            goToMainActivity();
+        }
+
         setContentView(R.layout.activity_profile);
         presenter = new ProfilePresenter(this);
 
@@ -68,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
 
         spinnerCity = (Spinner) findViewById(R.id.city_spinner);
         spinnerCity.setAdapter(ArrayAdapter.createFromResource(this,
-                R.array.country_array, android.R.layout.simple_spinner_item));
+                R.array.city_array, android.R.layout.simple_spinner_item));
 
         spinnerCity.setOnItemSelectedListener(this);
         spinnerCountry.setOnItemSelectedListener(this);
@@ -85,11 +86,25 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     @Override
     public void goToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
-    public void toLoginpage() {
-        finish();
+    public void updateUI(UserModel user) {
+        firstNameEd.setText(user.firstName);
+        lastNameEd.setText(user.lastName);
+
+        ArrayList<String> list=new ArrayList( Arrays.asList(getResources().getStringArray(R.array.city_array)) );
+        int pos= list.indexOf(user.city);
+        spinnerCountry.setSelection(pos);
+
+        list=new ArrayList( Arrays.asList(getResources().getStringArray(R.array.country_array)) );
+        pos= list.indexOf(user.country);
+        spinnerCountry.setSelection(pos);
+
+
+        dateTextField.setText(user.dob);
+        phoneEd.setText(user.phone);
     }
 
 

@@ -26,20 +26,20 @@
     <string name="error_diff_pass">The passwords is not the same</string>
 
 
-        <string-array name="city_array">
-            <item>Kyiv</item>
-            <item>Kharkiv</item>
-            <item>Dnipro</item>
-            <item>Lviv</item>
-            <item>Varshava</item>
-            <item>Kraków</item>
-            <item>Łódź</item>
-            <item>Poznan</item>
-            <item>Berlin</item>
-            <item>Munchen</item>
-            <item>Cologne</item>
-            <item>Hamburg</item>
-        </string-array>
+    <string-array name="city_array">
+        <item>Kyiv</item>
+        <item>Kharkiv</item>
+        <item>Dnipro</item>
+        <item>Lviv</item>
+        <item>Varshava</item>
+        <item>Kraków</item>
+        <item>Łódź</item>
+        <item>Poznan</item>
+        <item>Berlin</item>
+        <item>Munchen</item>
+        <item>Cologne</item>
+        <item>Hamburg</item>
+    </string-array>
 
 
     <string-array name="country_array">
@@ -47,4 +47,12 @@
         <item>Poland</item>
         <item>Germany</item>
     </string-array>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="news_api_key">7cf06a7c9b2a4a6891e1f2edca2bfa87</string>
 </resources>
